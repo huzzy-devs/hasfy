@@ -11,6 +11,10 @@ exports.Utils = class {
 		await r.dbCreate('hasfy').run(conn).catch(e => e);
 		await r.db('hasfy').tableCreate('guilds', { primaryKey: 'guildID' }).run(conn).catch(e => e);
 		await r.db('hasfy').tableCreate('gbans', { primaryKey: 'userID' }).run(conn).catch(e => e);
+		await r.db('hasfy').tableCreate('verify', { primaryKey: 'messageID' }).run(conn).catch(e => e);
+		await r.table('verify').indexCreate('guildID').run(conn).catch(e => e);
+		await r.db('hasfy').tableCreate('ads', { primaryKey: 'number' }).run(conn).catch(e => e);
+		await r.table('ads').indexCreate('guildID').run(conn).catch(e => e);
 
 		Hasfy.log.ready('RethinkDB connected');
 	}

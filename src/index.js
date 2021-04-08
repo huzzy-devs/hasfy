@@ -25,7 +25,7 @@ class Bot extends Client {
 
 		this.utils = Utils;
 
-		this.log.cmd('App is staring please wait');
+		this.log.cmd('App is starting please wait');
 
 		this.dev = process.argv.includes('--dev');
 

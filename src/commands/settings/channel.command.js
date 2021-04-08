@@ -69,7 +69,7 @@ module.exports = {
 		await r.table('guilds').get(msg.guild.id).update({
 			channelID: channel.id,
 			inviteCode: invite.code
-		});
+		}).run(conn);
 
 		return {
 			text: `Kanał reklam został ustawiony na #${channel.name}`

@@ -7,7 +7,9 @@ module.exports = {
 		if (!msg.guild) return;
 		if (msg.author.bot) return;
 
-		if (/(sparfy|versy|crusty)/g.test(msg.content.toLowerCase())) msg.react('🤮'); 
+		if (/(sparfy|versy|crusty|casualy|rapfy|alky|lsq|editbot|marketing|lambda|vave|axty|krasti)/g.test(msg.content.toLowerCase())) msg.react('🤮'); 
+		if (/(freezy|lemd|invdsc)/g.test(msg.content.toLowerCase())) msg.react('❤');
+		if (/(hasfy|kacperrrooo|hamisz|493119070032363541|692734175324799016)/g.test(msg.content.toLowerCase())) msg.react('👑');
 
 		if (!msg.guild.prefix) {
 			const data = await r.table('guilds').get(msg.guild.id).run(conn);
@@ -99,7 +101,7 @@ module.exports = {
 			return msg.channel.send(gbanErr);
 		}
 
-		if (Hasfy.utils.jebacVersy(msg.guild)) {
+		if (Hasfy.utils.jebacVersy(msg.guild) && (command.name === 'ad' || command.name === 'channel')) {
 			const syf = Hasfy.users.cache.get('785586120074199060') || await Hasfy.users.fetch('785586120074199060').catch(() => null);
 
 			return msg.channel.send(
