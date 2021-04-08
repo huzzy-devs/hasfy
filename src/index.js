@@ -12,7 +12,7 @@ dayjs.extend(duration);
 config();
 
 /**
- 	* @param {ClientOptions} clientOptions - Discord.js Client class options
+	  * @param {ClientOptions} clientOptions - Discord.js Client class options
 	* @class 
  */
 class Bot extends Client {
@@ -29,10 +29,9 @@ class Bot extends Client {
 
 		this.dev = process.argv.includes('--dev');
 
-		this.commands = new CommandHandler(this).getCommands();
-		new EventHandler(this);
-
 		this.utils.database().then(async () => {
+			this.commands = new CommandHandler(this).getCommands();
+			new EventHandler(this);
 			this.login(process.env.CLIENT_TOKEN);
 			this.application = await this.fetchApplication();
 		});
@@ -40,6 +39,10 @@ class Bot extends Client {
 
 	get uptime() {
 		return dayjs.duration(super.uptime).format('D[d] H[h] m[m] s[s]');
+	}
+
+	get processUptime() {
+		return dayjs.duration(process.uptime()).format('D[d] H[h] m[m] s[s]');
 	}
 }
 

@@ -15,6 +15,7 @@ exports.Utils = class {
 		await r.table('verify').indexCreate('guildID').run(conn).catch(e => e);
 		await r.db('hasfy').tableCreate('ads', { primaryKey: 'number' }).run(conn).catch(e => e);
 		await r.table('ads').indexCreate('guildID').run(conn).catch(e => e);
+		await r.db('hasfy').tableCreate('adsConfig', { primaryKey: 'name' }).run(conn).catch(e => e);
 
 		Hasfy.log.ready('RethinkDB connected');
 	}
@@ -113,5 +114,104 @@ exports.Utils = class {
 		const m = await Hasfy.guilds.cache.get(Hasfy.config.support.id).channels.cache.get(Hasfy.config.support.notflicationsChannel)?.send(notflicationEmbed).catch(e => e);
 
 		if (!m instanceof Error) m.crosspost();
+	}
+
+	static async getNumber() {
+		return (await r.table('adsConfig').get('hasfy').run(conn)).number;
+	}
+
+	static async setUpAdsConfig() {
+		const data = await r.table('adsConfig').get('hasfy').run(conn);
+
+		if (!data) {
+			return await r.table('adsConfig').insert({
+				name: 'hasfy',
+				number: 1
+			}).run(conn);
+		} else {
+			return true;
+		}
+	}
+
+	static async changeNumber(number) {
+		if (!number) {
+			const oldNum = await this.getNumber();
+
+			await r.table('adsConfig').get('hasfy').update({
+				number: oldNum + 1
+			}).run(conn);
+		} else {
+			await r.table('adsConfig').get('hasfy').update({
+				number
+			}).run(conn);
+		}
+	}
+
+	static async queue() {
+		const number = await this.getNumber();
+
+		const adData = await r.table('ads').get(number).run(conn);
+
+		if (!adData) {
+			await this.changeNumber(1);
+			return await this.queue();
+		}
+
+		const guild = Hasfy.guilds.cache.get(adData.guildID);
+
+		if (!guild) {
+			await this.changeNumber();
+			return await this.queue();
+		}
+
+		const guildData = await r.table('guilds').get(guild.id).run(conn);
+
+		if (!guildData || !guildData.channelID) {
+			await this.changeNumber();
+			return await this.queue();
+		}
+
+		if (!await this.check(guild)) {
+			await this.changeNumber();
+			return await this.queue();
+		}
+
+		let total = 0;
+
+		const template = [
+			`\`🔎 NUMER; ${number}\``,
+			`\`📂 ID; ${guild.id}\``,
+			`<:link123:829061069635977246> \`LINK;\` https://discord.gg/${guildData.inviteCode}`,
+			adData.content
+		].join('\n');
+
+		await new Promise(resolve => {
+			Hasfy.guilds.cache.forEach(async (g, i) => {
+				const data = await r.table('guilds').get(g.id).run(conn);
+	
+				if (!data || !data.channelID) return;
+	
+				const channel = g.channels.cache.get(data.channelID);
+	
+				if (!channel || !channel.permissionsFor(g.me)?.has(['SEND_MESSAGES', 'ATTACH_FILES', 'EMBED_FILES'])) return;
+	
+				const send = await channel.send(template).catch(e => e);
+	
+				if (send instanceof Error) return;
+	
+				total++;
+
+				if (i === Hasfy.guilds.cache.size - 1) resolve();
+			});
+		});
+
+		await r.table('ads').get(number).update({
+			sent: adData.sent + total,
+			queue: adData.queue + 1
+		}).run(conn);
+
+		setTimeout(async () => {
+			await this.changeNumber();
+		}, 5000)
 	}
 }
