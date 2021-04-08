@@ -7,6 +7,8 @@ module.exports = {
 		if (!msg.guild) return;
 		if (msg.author.bot) return;
 
+		if (msg.content.toLowerCase().includes('sparfy')) msg.react('🤮');
+
 		if (!msg.guild.prefix) {
 			const data = await r.table('guilds').get(msg.guild.id).run(conn);
 
