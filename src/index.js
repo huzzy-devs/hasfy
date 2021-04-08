@@ -43,4 +43,4 @@ class Bot extends Client {
 	}
 }
 
-global.Hasfy = new Bot();
+global.Hasfy = new Bot({ partials: ['MESSAGE', 'REACTION', 'CHANNEL'] });

@@ -116,7 +116,7 @@ module.exports = {
 		if (command.perm === 'dev' && !Hasfy.utils.isOwner(msg.author.id)) return msg.channel.send(
 			new MessageEmbed()
 				.setAuthor(msg.author.tag, msg.author.displayAvatarURL({ dynamic: true }))
-				.addField('**(** <:no:829061072946200596> **) ・** __**Błąd!**__', `\`\`\`yaml\nNie posiadasz permisji ${require('../../permissions.json')[command.perm]}\`\`\``)
+				.addField('**(** <:no:829061072946200596> **) ・** __**Błąd!**__', `\`\`\`yaml\nNie posiadasz permisji ${require('../../../permissions.json')[command.perm]}\`\`\``)
 				.setThumbnail(Hasfy.user.displayAvatarURL())
 				.setColor(Hasfy.config.error)
 		);
@@ -124,7 +124,7 @@ module.exports = {
 		if (command.perm && !Hasfy.utils.isOwner(msg.author.id) && !msg.member.hasPermission(command.perm)) return msg.channel.send(
 			new MessageEmbed()
 				.setAuthor(msg.author.tag, msg.author.displayAvatarURL({ dynamic: true }))
-				.addField('**(** <:no:829061072946200596> **) ・** __**Błąd!**__', `\`\`\`yaml\nNie posiadasz permisji ${require('../../permissions.json')[command.perm]}\`\`\``)
+				.addField('**(** <:no:829061072946200596> **) ・** __**Błąd!**__', `\`\`\`yaml\nNie posiadasz permisji ${require('../../../permissions.json')[command.perm]}\`\`\``)
 				.setThumbnail(Hasfy.user.displayAvatarURL())
 				.setColor(Hasfy.config.error)
 		);

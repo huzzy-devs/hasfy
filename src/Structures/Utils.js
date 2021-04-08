@@ -1,5 +1,5 @@
 global.r = require('rethinkdb');
-const { Team } = require('discord.js');
+const { Team, MessageEmbed } = require('discord.js');
 
 exports.Utils = class {
 	static async database() {
@@ -65,5 +65,53 @@ exports.Utils = class {
 		if (!channel || channel.type !== 'text') return false;
 
 		return this.checkChannel(channel);
+	}
+
+	static async approve({ guild, msg, user, embed, time, userID, channel, number }) {
+		await r.table('verify').get(msg.id).delete().run(conn);
+		const verifyOldEmbed = new MessageEmbed(embed).setColor('GREEN')
+			.addField('**(** <:user:829680298248896552> **) ・** __**Kto zaakceptował**__', `\`\`\`yaml\n${user.tag} (${user.id})\`\`\``)
+			.addField('**(** <a:info:828700286591828058> **) ・** __**Numer pod który została dodana reklama**__', `\`\`\`yaml\n${number}\`\`\``)
+		await msg.edit(verifyOldEmbed);
+
+		await msg.reactions.removeAll();
+
+		const notflicationEmbed = new MessageEmbed()
+			.setAuthor('Reklama została ZAAKCEPTOWANA', Hasfy.user.displayAvatarURL())
+			.setColor(Hasfy.config.main)
+			.addField('**(** <a:discord:829680039754334268> **) ・** __**Serwer**__', `\`\`\`yaml\n${guild ? `${guild.name} (${guild.id})` : 'Nie można określić'}\`\`\``)
+			.addField('**(** <:czas_end:829061069459947550> **) ・** __**Czas oczekiwania**__', `\`\`\`yaml\n${time.hours}H ${time.minutes}m\`\`\``)
+			.addField('**(** <a:info:828700286591828058> **) ・** __**Numer pod który została dodana reklama**__', `\`\`\`yaml\n${number}\`\`\``)
+			.addField('**(** <:user:829680298248896552> **) ・** __**Weryfikator**__', `\`\`\`yaml\n${user.tag} (${user.id})\`\`\``)
+
+		await channel?.send(notflicationEmbed).catch(e => e);
+		await Hasfy.users.cache.get(userID)?.send(notflicationEmbed).catch(e => e);
+		const m = await Hasfy.guilds.cache.get(Hasfy.config.support.id).channels.cache.get(Hasfy.config.support.notflicationsChannel)?.send(notflicationEmbed).catch(e => e);
+
+		if (!m instanceof Error) m.crosspost();
+	}
+
+	static async reject({ guild, msg, user, reason, embed, time, userID, channel }) {
+		await r.table('verify').get(msg.id).delete().run(conn);
+		const verifyOldEmbed = new MessageEmbed(embed).setColor(Hasfy.config.error)
+			.addField('**(** <:user:829680298248896552> **) ・** __**Kto odrzucił**__', `\`\`\`yaml\n${user.tag} (${user.id})\`\`\``)
+			.addField('**(** <a:info:828700286591828058> **) ・** __**Powód odrzucenia**__', `\`\`\`yaml\n${reason}\`\`\``)
+		await msg.edit(verifyOldEmbed);
+
+		await msg.reactions.removeAll();
+
+		const notflicationEmbed = new MessageEmbed()
+			.setAuthor('Reklama została ODRZUCONA', Hasfy.user.displayAvatarURL())
+			.setColor(Hasfy.config.error)
+			.addField('**(** <a:discord:829680039754334268> **) ・** __**Serwer**__', `\`\`\`yaml\n${guild ? `${guild.name} (${guild.id})` : 'Nie można określić'}\`\`\``)
+			.addField('**(** <:czas_end:829061069459947550> **) ・** __**Czas oczekiwania**__', `\`\`\`yaml\n${time.hours}H ${time.minutes}m\`\`\``)
+			.addField('**(** <a:info:828700286591828058> **) ・** __**Powód odrzucenia**__', `\`\`\`yaml\n${reason}\`\`\``)
+			.addField('**(** <:user:829680298248896552> **) ・** __**Weryfikator**__', `\`\`\`yaml\n${user.tag} (${user.id})\`\`\``)
+
+		await channel?.send(notflicationEmbed).catch(e => e);
+		await Hasfy.users.cache.get(userID)?.send(notflicationEmbed).catch(e => e);
+		const m = await Hasfy.guilds.cache.get(Hasfy.config.support.id).channels.cache.get(Hasfy.config.support.notflicationsChannel)?.send(notflicationEmbed).catch(e => e);
+
+		if (!m instanceof Error) m.crosspost();
 	}
 }

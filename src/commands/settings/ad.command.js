@@ -51,7 +51,20 @@ module.exports = {
 			.addField('**(** <a:resources:824293553030561802> **) ・** __**Serwer posiada reklame?**__', `\`\`\`yaml\n${adData ? `Serwer posiada reklame pod numerem ${adData.number}` : 'Serwer nie posiada reklamy'}\`\`\``)
 			.addField('**(** 💬 **) ・** __**Treść**__', content)
 			.setFooter(`System weryfikacji reklam ${Hasfy.user.username}`, 'https://cdn.discordapp.com/emojis/772153283300950087.gif?v=1')
-		Hasfy.channels.cache.get(Hasfy.config.support.verifyChannel)?.send(verifyEmbed);
+		const m = await Hasfy.channels.cache.get(Hasfy.config.support.verifyChannel)?.send(verifyEmbed);
+
+		m.react('yes:825785935706193950');
+		m.react('no:825785890289877032');
+		m.react('a:info:828700286591828058');
+
+		await r.table('verify').insert({
+			guildID: msg.guild.id,
+			messageID: m.id,
+			timestamp: Date.now(),
+			userID: msg.author.id,
+			embed: JSON.stringify(verifyEmbed.toJSON()),
+			content
+		}).run(conn);
 
 		return {
 			text: 'Reklama została wysłana do weryfikacji'
