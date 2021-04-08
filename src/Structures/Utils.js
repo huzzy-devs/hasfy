@@ -28,4 +28,38 @@ exports.Utils = class {
 			return owner.id === userID;
 		}
 	}
+
+	static fakeObject = {
+		has() {
+			return true;
+		}
+	}
+
+	static checkChannel(channel) {
+		let pass = true;
+
+		for (const perm of channel.permissionOverwrites) {
+			const permission = channel.permissionsFor(perm.id);
+			if (permission) {
+				if (!permission.has(['VIEW_CHANNEL', 'READ_MESSAGE_HISTORY'])) {
+					pass = false;
+					break;
+				}
+			}
+		}
+
+		return pass;
+	}
+
+	static async check(guild) {
+		const data = await r.table('guilds').get(guild.id).run(conn);
+
+		if (!data || !data.channelID) return false;
+
+		const channel = guild.channels.cache.get(data.channelID);
+
+		if (!channel || channel.type !== 'text') return false;
+
+		return this.checkChannel(channel);
+	}
 }

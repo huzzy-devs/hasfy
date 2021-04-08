@@ -11,7 +11,7 @@ exports.EventHandler = class {
 					const event = require(`../events/${dir}/${file}`);
 
 					if (!event.name || !event.run) {
-						if (Hasfy.dev) Hasfy.log.warn(`${file} cannot be loaded because name or run is missin`);
+						if (Hasfy.dev) Hasfy.log.warn(`${file} cannot be loaded because name or run is missing`);
 						return;
 					}			
 					
