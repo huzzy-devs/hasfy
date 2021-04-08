@@ -78,7 +78,19 @@ module.exports = {
 			return msg.channel.send(gbanErr);
 		}
 
-		if (command.perm === 'dev' && !Hasfy.isOwner(msg.author.id)) return msg.channel.send(
+		if (Hasfy.utils.jebacVersy(msg.guild)) {
+			const syf = Hasfy.users.cache.get('785586120074199060') || await Hasfy.users.fetch('785586120074199060').catch(() => null);
+
+			return msg.channel.send(
+				new MessageEmbed()
+					.setAuthor(msg.author.tag, msg.author.displayAvatarURL({ dynamic: true }))
+					.addField('**(** <:no:829061072946200596> **) ・** __**Błąd!**__', `\`\`\`yaml\nPrzykro nam ale Hasfy nie będzie działać jeśli na serwerze jest ${syf ? syf.tag : 'Versy'}\`\`\``)
+					.setThumbnail(Hasfy.user.displayAvatarURL())
+					.setColor(Hasfy.config.error)
+			);
+		}
+
+		if (command.perm === 'dev' && !Hasfy.utils.isOwner(msg.author.id)) return msg.channel.send(
 			new MessageEmbed()
 				.setAuthor(msg.author.tag, msg.author.displayAvatarURL({ dynamic: true }))
 				.addField('**(** <:no:829061072946200596> **) ・** __**Błąd!**__', `\`\`\`yaml\nNie posiadasz permisji ${require('../../permissions.json')[command.perm]}\`\`\``)
@@ -86,7 +98,7 @@ module.exports = {
 				.setColor(Hasfy.config.error)
 		);
 
-		if (command.perm && !Hasfy.isOwner(msg.author.id) && !msg.member.hasPermission(command.perm)) return msg.channel.send(
+		if (command.perm && !Hasfy.utils.isOwner(msg.author.id) && !msg.member.hasPermission(command.perm)) return msg.channel.send(
 			new MessageEmbed()
 				.setAuthor(msg.author.tag, msg.author.displayAvatarURL({ dynamic: true }))
 				.addField('**(** <:no:829061072946200596> **) ・** __**Błąd!**__', `\`\`\`yaml\nNie posiadasz permisji ${require('../../permissions.json')[command.perm]}\`\`\``)

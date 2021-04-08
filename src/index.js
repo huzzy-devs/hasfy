@@ -4,6 +4,10 @@ const { EventHandler } = require('./Structures/EventHandler');
 const { Logger } = require('./Structures/Logger');
 const { Utils } = require('./Structures/Utils');
 const { config } = require('dotenv');
+const duration = require('dayjs/plugin/duration');
+const dayjs = require('dayjs');
+
+dayjs.extend(duration);
 
 config();
 
@@ -28,9 +32,14 @@ class Bot extends Client {
 		this.commands = new CommandHandler(this).getCommands();
 		new EventHandler(this);
 
-		this.utils.database().then(() => {
+		this.utils.database().then(async () => {
 			this.login(process.env.CLIENT_TOKEN);
+			this.application = await this.fetchApplication();
 		});
+	}
+
+	get uptime() {
+		return dayjs.duration(super.uptime).format('H[h] m[m] s[s]');
 	}
 }
 
