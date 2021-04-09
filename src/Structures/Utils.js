@@ -157,29 +157,27 @@ exports.Utils = class {
 
 		if (!adData) {
 			await this.changeNumber(1);
-			return await this.queue();
+			return this.queue();
 		}
 
 		const guild = Hasfy.guilds.cache.get(adData.guildID);
 
 		if (!guild) {
 			await this.changeNumber();
-			return await this.queue();
+			return this.queue();
 		}
 
 		const guildData = await r.table('guilds').get(guild.id).run(conn);
 
 		if (!guildData || !guildData.channelID) {
 			await this.changeNumber();
-			return await this.queue();
+			return this.queue();
 		}
 
 		if (!await this.check(guild)) {
 			await this.changeNumber();
-			return await this.queue();
+			return this.queue();
 		}
-
-		let total = 0;
 
 		const template = [
 			`\`🔎 NUMER; ${number}\``,
@@ -188,28 +186,31 @@ exports.Utils = class {
 			adData.content
 		].join('\n');
 
-		await new Promise(resolve => {
-			Hasfy.guilds.cache.forEach(async (g, i) => {
-				const data = await r.table('guilds').get(g.id).run(conn);
-	
-				if (!data || !data.channelID) return;
-	
-				const channel = g.channels.cache.get(data.channelID);
-	
-				if (!channel || !channel.permissionsFor(g.me)?.has(['SEND_MESSAGES', 'ATTACH_FILES', 'EMBED_FILES'])) return;
-	
-				const send = await channel.send(template).catch(e => e);
-	
-				if (send instanceof Error) return;
-	
-				total++;
+		let total = 0;
 
-				if (i === Hasfy.guilds.cache.size - 1) resolve();
-			});
+		let sent = adData.sent;
+
+		Hasfy.guilds.cache.forEach(async (g) => {
+			const data = await r.table('guilds').get(g.id).run(conn);
+
+			if (!data || !data.channelID) return;
+
+			const channel = g.channels.cache.get(data.channelID);
+
+			if (!channel || !channel.permissionsFor(g.me)?.has(['SEND_MESSAGES', 'ATTACH_FILES', 'EMBED_FILES'])) return;
+
+			const send = await channel.send(template).catch(e => e);
+
+			if (send instanceof Error) return;
+
+			await r.table('ads').get(number).update({
+				sent: sent + 1,
+			}).run(conn);
+
+			sent++;
 		});
 
 		await r.table('ads').get(number).update({
-			sent: adData.sent + total,
 			queue: adData.queue + 1
 		}).run(conn);
 
