@@ -5,7 +5,7 @@ module.exports = {
 	name: 'eval',
 	aliases: ['js', 'dżawaskript', 'jebać_pseudoli', 'jestem_pseudolem_kappa', 'e'],
 	perm: 'dev',
-	run: async ({ msg, args }) => {
+	run: async ({ msg, args, cmd }) => {
 
 		let toEval = args.join(' ');
 

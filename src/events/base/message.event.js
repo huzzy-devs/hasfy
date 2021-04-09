@@ -1,4 +1,4 @@
-const { MessageEmbed } = require('discord.js');
+const { MessageEmbed, Team } = require('discord.js');
 const dayjs = require('dayjs');
 
 module.exports = {
@@ -26,12 +26,12 @@ module.exports = {
 		}
 
 		if (msg.content.replace(/[<@!>]/g, '') === Hasfy.user.id) return msg.channel.send(
-			new MessageEmbed()
-				.setAuthor(msg.author.tag, msg.author.displayAvatarURL({ dynamic: true }))
-				.addField('\`Przydatne informacje\`', `> \`Prefix na serwerze: ${msg.guild.prefix}\`\n> \`Ping: ${Hasfy.ws.ping}ms\``)
-				.addField('\`Pomoc?\`', `> \`Listę komend znajdziesz po wpisaniu ${msg.guild.prefix}pomoc\`\n> \`Link do serwera support znajdziesz po wpisaniu ${msg.guild.prefix}support\``)
-				.setColor(Hasfy.config.main)
-		);
+            new MessageEmbed()
+                .setAuthor(msg.author.tag, msg.author.displayAvatarURL({ dynamic: true }))
+                .setDescription(`> \`‣\` *Cześć! Jestem ${Hasfy.user.username}. Poniżej znajdziesz kilka informacji o mnie:*\n\n> \`‣\` *Uptime:*\n\`\`\`css\n[1] ‣ ${Hasfy.uptime} \n\`\`\`\n\n> \`‣\` *Prefix:*\n\`\`\`css\n[2] ‣ ${msg.guild.prefix}\n\`\`\`\n\n> \`‣\` *Właściciele:*\n\`\`\`css\n[3] ‣ "${Hasfy.application.owner instanceof Team ? Hasfy.application.owner.members.map(u => u.user.tag).join(' & ') : Hasfy.application.owner.tag}"\n\`\`\``)
+                .setFooter(`Na polecenie: ${msg.author.tag} (${msg.author.id})`, msg.author.displayAvatarURL({ dynamic: true }))
+                .setColor(Hasfy.config.main)
+        );
 
 
 		const msgPrefix = msg.content.startsWith(msg.guild.prefix) ? msg.guild.prefix : msg.content.startsWith(`<@!${Hasfy.user.id}>`) ? `<@!${Hasfy.user.id}>` : `<@${Hasfy.user.id}>`;

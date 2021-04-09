@@ -38,11 +38,11 @@ class Bot extends Client {
 	}
 
 	get uptime() {
-		return dayjs.duration(super.uptime).format('D[d] H[h] m[m] s[s]');
+		return dayjs.duration(super.uptime).format('D[D] H[H] m[m] s[s]');
 	}
 
 	get processUptime() {
-		return dayjs.duration(process.uptime()).format('D[d] H[h] m[m] s[s]');
+		return dayjs.duration(process.uptime()).format('D[D] H[H] m[m] s[s]');
 	}
 }
 
