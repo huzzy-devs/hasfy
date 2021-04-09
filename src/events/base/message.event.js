@@ -7,7 +7,7 @@ module.exports = {
 		if (!msg.guild) return;
 		if (msg.author.bot) return;
 
-		if (/(sparfy|versy|crusty|casualy|rapfy|alky|lsq|editbot|marketing|lambda|vave|axty|krasti)/g.test(msg.content.toLowerCase())) msg.react('🤮'); 
+		if (/(sparfy|versy|crusty|casualy|rapfy|alky|lsq|editbot|marketing|lambda|vave|axty|krasti)/g.test(msg.content.toLowerCase())) msg.react('🤮');
 		if (/(freezy|lemd|invdsc)/g.test(msg.content.toLowerCase())) msg.react('❤');
 		if (/(hasfy|kacperrrooo|hamisz|493119070032363541|692734175324799016)/g.test(msg.content.toLowerCase())) msg.react('👑');
 
@@ -54,18 +54,18 @@ module.exports = {
 
 		if (msg.author.id === '392312614455214082') return msg.channel.send(
 			new MessageEmbed()
-			.setAuthor("Oof\n!", "https://cdn.discordapp.com/emojis/826487512703827968.png?v=1")
-			.setColor(bot.config.main)
-			.setDescription("> *Oof, wygląda na to że dostałeś \`order bycia fałszywym\`!*\n> **Dla ludzi fałszywych mogę powiedzieć tylko kto nadał \`zasłużony order debilizmu\`**\n\n> *\`Administrator:\`*\n\`\`\`css\n[1] Automatyczny System Wykrywania Fałszywych Ludzi\n\`\`\`")
-			.setFooter(`Na polecenie: ${msg.author.tag}`, msg.author.displayAvatarURL({ dynamic: true }))
+				.setAuthor("Oof\n!", "https://cdn.discordapp.com/emojis/826487512703827968.png?v=1")
+				.setColor(bot.config.main)
+				.setDescription("> *Oof, wygląda na to że dostałeś \`order bycia fałszywym\`!*\n> **Dla ludzi fałszywych mogę powiedzieć tylko kto nadał \`zasłużony order debilizmu\`**\n\n> *\`Administrator:\`*\n\`\`\`css\n[1] Automatyczny System Wykrywania Fałszywych Ludzi\n\`\`\`")
+				.setFooter(`Na polecenie: ${msg.author.tag}`, msg.author.displayAvatarURL({ dynamic: true }))
 		)
 
 		if (msg.author.id === '311155103480545281') return msg.channel.send(
 			new MessageEmbed()
-			.setAuthor("Oof\n!", "https://cdn.discordapp.com/emojis/826487512703827968.png?v=1")
-			.setColor(bot.config.main)
-			.setDescription("> *Oof, wygląda na to że dostałeś \`order chamstwa\`!*\n> **Dla chamów mogę powiedzieć tylko kto nadał \`zasłużony order debilizmu\`**\n\n> *\`Administrator:\`*\n\`\`\`css\n[1] Automatyczny System Wykrywania Chamów\n\`\`\`")
-			.setFooter(`Na polecenie: ${msg.author.tag}`, msg.author.displayAvatarURL({ dynamic: true }))
+				.setAuthor("Oof\n!", "https://cdn.discordapp.com/emojis/826487512703827968.png?v=1")
+				.setColor(bot.config.main)
+				.setDescription("> *Oof, wygląda na to że dostałeś \`order chamstwa\`!*\n> **Dla chamów mogę powiedzieć tylko kto nadał \`zasłużony order debilizmu\`**\n\n> *\`Administrator:\`*\n\`\`\`css\n[1] Automatyczny System Wykrywania Chamów\n\`\`\`")
+				.setFooter(`Na polecenie: ${msg.author.tag}`, msg.author.displayAvatarURL({ dynamic: true }))
 		)
 
 		if (msg.author.id === "715825874393628685") {
@@ -137,7 +137,16 @@ module.exports = {
 
 		const res = await command.run(data).catch(e => e);
 
-		if (res instanceof Error) return console.log(res);
+		if (res instanceof Error) {
+			Hasfy.utils.errorHandle({ error: res, msg, command });
+			return msg.channel.send(
+				new MessageEmbed()
+					.setAuthor(msg.author.tag, msg.author.displayAvatarURL({ dynamic: true }))
+					.addField('**(** <:no:829061072946200596> **) ・** __**Błąd!**__', `\`\`\`yaml\nPodczas wykonywania polecenia napotkałem błąd, który zgłosiłem do programistów\nJeśli będzie dalej występował skontaktuj się z support'em\`\`\``)
+					.setThumbnail(Hasfy.user.displayAvatarURL())
+					.setColor(Hasfy.config.error)
+			)
+		}
 
 		if (res) {
 			if (res.embeds) {

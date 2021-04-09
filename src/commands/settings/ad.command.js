@@ -51,7 +51,7 @@ module.exports = {
 			.addField('**(** <a:resources:824293553030561802> **) ・** __**Serwer posiada reklame?**__', `\`\`\`yaml\n${adData ? `Serwer posiada reklame pod numerem ${adData.number}` : 'Serwer nie posiada reklamy'}\`\`\``)
 			.addField('**(** 💬 **) ・** __**Treść**__', content)
 			.setFooter(`System weryfikacji reklam ${Hasfy.user.username}`, 'https://cdn.discordapp.com/emojis/772153283300950087.gif?v=1')
-		const m = await Hasfy.channels.cache.get(Hasfy.config.support.verifyChannel)?.send(verifyEmbed);
+		const m = await Hasfy.channels.cache.get(Hasfy.config.support.verifyChannel)?.send(`<@&${Hasfy.config.support.verifyRole}>`, { embed: verifyEmbed });
 
 		m.react('yes:825785935706193950');
 		m.react('no:825785890289877032');

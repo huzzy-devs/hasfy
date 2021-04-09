@@ -1,5 +1,8 @@
 global.r = require('rethinkdb');
-const { Team, MessageEmbed } = require('discord.js');
+const { Team, MessageEmbed, WebhookClient } = require('discord.js');
+const webhooks = require('../../webhooks.json');
+
+const errors = new WebhookClient(webhooks.errors.id, webhooks.errors.token);
 
 exports.Utils = class {
 	static async database() {
@@ -213,5 +216,20 @@ exports.Utils = class {
 		setTimeout(async () => {
 			await this.changeNumber();
 		}, 5 * 60 * 1000);
+	}
+
+	static async errorHandle({ error, msg, command }) {
+		const embed = new MessageEmbed()
+			.setAuthor('Błąd bota!', Hasfy.user.displayAvatarURL())
+			.setColor(Hasfy.config.error)
+			.addField('**(** <a:strzalka_bok:829061074070011968> **) ・** __**Błąd**__', `\`\`\`yaml\n${error.stack.toString().slice(0, 1000)}\`\`\``)
+			.addField('**(** <a:discord:829680039754334268> **) ・** __**Serwer**__', `\`\`\`yaml\n${msg.guild.name} | ${msg.guild.id}\`\`\``)
+			.addField('**(** <:user:829680298248896552> **) ・** __**Osoba**__', `\`\`\`yaml\n${msg.author.tag} | ${msg.author.id}\`\`\``)
+			.addField('**(** <a:resources:824293553030561802> **) ・** __**Komenda**__', `\`\`\`yaml\n${command.name}\`\`\``)
+			.setFooter(`System zgłaszania błędów ${Hasfy.user.username}`, 'https://cdn.discordapp.com/emojis/828700286591828058.gif?v=1')
+		errors.send({
+			avatarURL: Hasfy.user.displayAvatarURL(),
+			embeds: [embed.toJSON()]
+		});
 	}
 }
