@@ -5,8 +5,8 @@ const webhooks = require('../../webhooks.json');
 const errors = new WebhookClient(webhooks.errors.id, webhooks.errors.token);
 
 exports.Utils = class {
-	static async database() {
-		global.conn = await r.connect({ db: 'hasfy' }).catch(() => {
+	static async database(client) {
+		global.conn = await r.connect(client.config.rethinkdb).catch(() => {
 			Hasfy.log.error('RethinkDB connection rejected');
 			process.exit();
 		});

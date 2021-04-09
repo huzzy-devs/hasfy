@@ -2,7 +2,7 @@ module.exports = {
 	name: 'ping',
 	run: async () => {
 		return {
-			text: `Pong! 🏓 ${Hasfy.wsa.ping}ms`
+			text: `Pong! 🏓 ${Hasfy.ws.ping}ms`
 		}
 	}
 }

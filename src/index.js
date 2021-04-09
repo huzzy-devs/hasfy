@@ -29,7 +29,7 @@ class Bot extends Client {
 
 		this.dev = process.argv.includes('--dev');
 
-		this.utils.database().then(async () => {
+		this.utils.database(this).then(async () => {
 			this.commands = new CommandHandler(this).getCommands();
 			new EventHandler(this);
 			this.login(process.env.CLIENT_TOKEN);
