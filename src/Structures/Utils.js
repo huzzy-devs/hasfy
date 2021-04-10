@@ -188,30 +188,31 @@ exports.Utils = class {
 
 		let total = 0;
 
-		let sent = adData.sent;
+		const cache = Hasfy.guilds.cache;
 
-		Hasfy.guilds.cache.forEach(async (g) => {
-			const data = await r.table('guilds').get(g.id).run(conn);
+		await new Promise(resolve => {
+			cache.forEach(async (g) => {
+				const data = await r.table('guilds').get(g.id).run(conn);
+	
+				if (!data || !data.channelID) return;
+	
+				const channel = g.channels.cache.get(data.channelID);
+	
+				if (!channel || !channel.permissionsFor(g.me)?.has(['SEND_MESSAGES', 'ATTACH_FILES', 'EMBED_FILES'])) return;
+	
+				const send = await channel.send(template).catch(e => e);
+	
+				if (send instanceof Error) return;
+	
+				total++;
 
-			if (!data || !data.channelID) return;
-
-			const channel = g.channels.cache.get(data.channelID);
-
-			if (!channel || !channel.permissionsFor(g.me)?.has(['SEND_MESSAGES', 'ATTACH_FILES', 'EMBED_FILES'])) return;
-
-			const send = await channel.send(template).catch(e => e);
-
-			if (send instanceof Error) return;
-
-			await r.table('ads').get(number).update({
-				sent: sent + 1,
-			}).run(conn);
-
-			sent++;
+				if (g.id === cache.last().id) resolve();
+			});
 		});
 
 		await r.table('ads').get(number).update({
-			queue: adData.queue + 1
+			queue: adData.queue + 1,
+			sent: adData.sent + total
 		}).run(conn);
 
 		setTimeout(async () => {

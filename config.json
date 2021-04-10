@@ -6,7 +6,8 @@
 		"verifyChannel": "826905964951109713",
 		"id": "826747391792250880",
 		"notflicationsChannel": "826897202407276604",
-		"verifyRole": "826896953765134346"
+		"verifyRole": "826896953765134346",
+		"invite": "https://discord.gg/sHhdXuCBU8"
 	},
 	"rethinkdb": {
 		"db": "hasfy"
