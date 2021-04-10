@@ -36,6 +36,11 @@ module.exports = {
 			text: 'Reklama musi mieć minimalnie 10 słów'
 		}
 
+		if (msg.mentions.users.first() || msg.mentions.members.first() || msg.mentions.roles.first() || content.includes('@everyone') || content.includes('@here')) return {
+			type: 'error',
+			text: 'Reklama nie może zawierać wzmianek'
+		}
+
 		const guildData = await r.table('guilds').get(msg.guild.id).run(conn);
 		const channel = msg.guild.channels.cache.get(guildData.channelID);
 		const adData = (await r.table('ads').getAll(msg.guild.id, { index: 'guildID' }).coerceTo('array').run(conn))[0];
