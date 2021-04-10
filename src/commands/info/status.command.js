@@ -13,7 +13,7 @@ module.exports = {
 			.setAuthor(`Informacje o serwerze ${msg.guild.name}`, Hasfy.user.displayAvatarURL())
 			.setColor(Hasfy.config.main)
 			.addField('**(** <:channel:829681620638367784> **) ・** __**Kanał reklam**__', `\`\`\`yaml\n${channel ? (Hasfy.utils.checkChannel(channel) ? `#${channel.name}` : `Kanał reklam nie jest widoczny dla każdego | #${channel.name}`) : 'Nie ustawiony' }\`\`\`` )
-			.addField('**(** <a:info:828700286591828058> **) ・** __**Reklama**__', `\`\`\`yaml\n${adData ? `Status: Zweryfikowana\nWysłana: ${adData.sent}\nW cyklach: ${adData.queue}` : verifyData ? `W trakcie weryfikacji` : 'Nie ustawiona'}\`\`\``)
+			.addField('**(** <a:info:828700286591828058> **) ・** __**Reklama**__', `\`\`\`yaml\n${adData ? `Status: Zweryfikowana\nWysłana w cyklach: ${adData.queue}` : verifyData ? `W trakcie weryfikacji` : 'Nie ustawiona'}\`\`\``)
 			.setFooter(`Polecenie wykonane dla ${msg.author.tag}`, msg.author.displayAvatarURL({ dynamic: true }))
 
 		if (adData) embed.addField('**(** 💬 **) ・** __**Treść reklamy**__', adData.content)
