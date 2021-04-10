@@ -217,6 +217,7 @@ exports.Utils = class {
 
 		setTimeout(async () => {
 			await this.changeNumber();
+			await this.queue();
 		}, 5 * 60 * 1000);
 	}
 
