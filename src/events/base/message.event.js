@@ -7,7 +7,7 @@ module.exports = {
 		if (!msg.guild) return;
 		if (msg.author.bot) return;
 
-		if (/(sparfy|versy|crusty|casualy|rapfy|alky|lsq|editbot|marketing|lambda|vave|axty|krasti)/g.test(msg.content.toLowerCase())) msg.react('🤮');
+		if (/(sparfy|versy|crusty|casualy|rapfy|alky|lsq|editbot|marketing|lambda|vave|axty|krasti|mocek)/g.test(msg.content.toLowerCase())) msg.react('🤮');
 		if (/(freezy|lemd|invdsc)/g.test(msg.content.toLowerCase())) msg.react('❤');
 		if (/(hasfy|kacperrrooo|hamisz|493119070032363541|692734175324799016)/g.test(msg.content.toLowerCase())) msg.react('👑');
 

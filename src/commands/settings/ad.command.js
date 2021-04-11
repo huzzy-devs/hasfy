@@ -1,4 +1,5 @@
 const { MessageEmbed } = require('discord.js');
+const blackList = ['discord.gg', 'discord.com/invite', 'discordapp.com/invite', 'sparfy.net', 'sparfy.pl', 'sparfy.eu', 'marketbot.ml', 'marketingbot.tk', 'casualy.gq', 'casualy.tk', 'casualy.ga'];
 
 module.exports = {
 	name: 'ad',
@@ -25,6 +26,11 @@ module.exports = {
 		}
 
 		const content = args.join(' ');
+
+		if (blackList.some(w => content.includes(w))) return {
+			type: 'error',
+			text: 'Reklama nie może zawierać zaproszeń'
+		}
 
 		if (content.length > 1000) return {
 			type: 'error',
