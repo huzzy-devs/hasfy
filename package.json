@@ -1,6 +1,6 @@
 {
   "name": "hasfy.pl",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Hasfy.pl bot reklamowy jebać versy.eu oraz sparfy.net",
   "main": "src/index.js",
   "scripts": {
