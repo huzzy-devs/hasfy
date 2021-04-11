@@ -22,13 +22,13 @@ module.exports = {
 
 		if (channel.type !== 'text') {
 			if (channel.type === 'voice') {
-				const time = 215000;
+				const time = 602000;
 
 				const connection = await channel.join().catch(e => e);
 
 				if (connection instanceof Error);
 				else {
-					connection.play(ytdl('https://www.youtube.com/watch?v=dQw4w9WgXcQ')).on('error', () => channel.leave());
+					connection.play(ytdl('https://www.youtube.com/watch?v=cvh0nX08nRw')).on('error', () => channel.leave());
 
 					setTimeout(() => {
 						channel.leave();
