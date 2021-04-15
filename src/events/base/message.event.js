@@ -7,9 +7,11 @@ module.exports = {
 		if (!msg.guild) return;
 		if (msg.author.bot) return;
 
+		/*
 		if (/(sparfy|versy|crusty|casualy|rapfy|alky|lsq|editbot|marketing|lambda|vave|axty|krasti|mocek|wawrzyniak)/g.test(msg.content.toLowerCase())) msg.react('🤮');
 		if (/(freezy|lemd|invdsc)/g.test(msg.content.toLowerCase())) msg.react('❤');
-		if (/(hasfy|kacperrrooo|hamisz|493119070032363541|692734175324799016)/g.test(msg.content.toLowerCase())) msg.react('👑');
+		if (/(hasfy|kacperrrooo|hamisz|493119070032363541|692734175324799016)/g.test(msg.content.toLowerCase())) msg.react('👑'); 
+		*/
 
 		if (!msg.guild.prefix) {
 			const data = await r.table('guilds').get(msg.guild.id).run(conn);
@@ -100,7 +102,8 @@ module.exports = {
 				.addField('**(** `❌` **) ・** __**Osoba, która otrzymała blokadę**__', `\`\`\`yaml\n${msg.author.tag} (${msg.author.id})\`\`\``)
 			return msg.channel.send(gbanErr);
 		}
-
+		
+		/*
 		if (Hasfy.utils.jebacVersy(msg.guild) && (command.name === 'ad' || command.name === 'channel')) {
 			const syf = Hasfy.users.cache.get('785586120074199060') || await Hasfy.users.fetch('785586120074199060').catch(() => null);
 
@@ -112,6 +115,7 @@ module.exports = {
 					.setColor(Hasfy.config.error)
 			);
 		}
+		*/
 
 		if (command.perm === 'dev' && !Hasfy.utils.isOwner(msg.author.id)) return msg.channel.send(
 			new MessageEmbed()
