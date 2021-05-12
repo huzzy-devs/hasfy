@@ -12,7 +12,7 @@ dayjs.extend(duration);
 config();
 
 /**
-	  * @param {ClientOptions} clientOptions - Discord.js Client class options
+	* @param {ClientOptions} clientOptions - Discord.js Client class options
 	* @class 
  */
 class Bot extends Client {
